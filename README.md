@@ -58,10 +58,6 @@ $ sudo docker run -itd --rm --name="ubuntu" ubuntu:20.04
 ```
 !!! Don't use --gpus option in this step. With gpus option, it will be failed. !!!
 ---
-```
-You might be asked Kyeboard Layout.
-My case was 6(Asia) --> 79(Tokyo) --> 55(Japanese) --> 1(Japanese). 
-```
 
 # 6. Log into it and install driver
 You will see the Error message like below. This is because container didi not run with the option of "--gpus all".
@@ -70,6 +66,10 @@ $ sudo docker exec -it ubuntu /bin/bash
 -----
 root@3baa8af15d57:/# apt-get update
 root@3baa8af15d57:/# apt install nvidia-driver-470
+```
+You might be asked Kyeboard Layout. 
+My case was 6(Asia) --> 79(Tokyo) --> 55(Japanese) --> 1(Japanese). 
+```
 root@3baa8af15d57:/# nvidia-smi
 Failed to initialize NVML: Unknown Error
 ```
