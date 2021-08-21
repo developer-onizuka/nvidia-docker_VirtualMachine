@@ -1,6 +1,13 @@
 # 0. Install Ubuntu 20.04 as Virtual Machine with GPU on KVM. See the URL below.
 https://github.com/developer-onizuka/virtualMachine_withGPU
 
+Note that you don't need install any GPU librarys in Host Machine. Even nvidia-driver in Host Machine. 
+You only install nvidia-driver and CUDA only into the Guest Linux Machine on KVM.
+```
+OptiPlex-5050:~$ dpkg -l |grep -i nvidia
+OptiPlex-5050:~$ (no result)
+```
+
 # 1. Create directory for docker images on Virtual Machine
 ```
 $ sudo mount -t ext4 -o data=ordered /dev/nvme0n1 /mnt   (This is my case. I use NVMe disk for mounting at /mnt.)
