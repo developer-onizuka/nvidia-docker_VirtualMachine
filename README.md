@@ -86,4 +86,19 @@ root@8fe2ce33725a:/# apt-get install python3-opencv
    28  cmake .. -DDLIB_USE_CUDA=1 -DUSE_AVX_INSTRUCTIONS=1 -DCUDA_HOST_COMPILER=/usr/bin/gcc-6
    29  history
 
+
+
+    6  cp /lib/systemd/system/docker.service /etc/systemd/system/
+    7  vi /etc/systemd/system/docker.service 
+
+ExecStart=/usr/bin/dockerd -H fd:// --containerd=/run/containerd/containerd.sock --data-root /mnt/docker
+#ExecStart=/usr/bin/dockerd -H fd:// --containerd=/run/containerd/containerd.sock
+
+
+
+
+    8  systemctl daemon-reload
+    9  systemctl restart docker
+
+
 ```
