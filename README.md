@@ -1,4 +1,5 @@
-# nvidia-docker_VirtualMachine
+# 0. Install Ubuntu on KVM. See URL below.
+https://github.com/developer-onizuka/virtualMachine_withGPU
 
 # 1. Create directory for docker images
 ```
