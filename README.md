@@ -157,9 +157,10 @@ Type "help", "copyright", "credits" or "license" for more information.
 True
 ```
 
-# 12. Install OpenCV
+# 12. Install OpenCV and face_recognition
 ```
 root@3baa8af15d57:/# apt-get install -y python3-opencv
+root@3baa8af15d57:/# pip3 install face_recognition
 ```
 
 # 13. Commit image after driver install everything.
