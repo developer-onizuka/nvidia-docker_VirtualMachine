@@ -55,10 +55,12 @@ $ sudo docker inspect work
     }
 ]
 $ sudo docker run -itd --rm --name="ubuntu" ubuntu:20.04
-!!! Don't use --gpus option in this step. With gpus option, it will be failed. !!!
-You might ask Kyeboard Layout.
-My case was 6(Asia) --> 79(Tokyo) --> 55(Japanese) --> 1(Japanese). 
 ```
+!!! Don't use --gpus option in this step. With gpus option, it will be failed. !!!
+---
+You might be asked Kyeboard Layout.
+My case was 6(Asia) --> 79(Tokyo) --> 55(Japanese) --> 1(Japanese). 
+
 
 # 6. Log into it and install driver
 You will see the Error message like below. This is because container didi not run with the option of "--gpus all".
