@@ -131,6 +131,8 @@ root@3baa8af15d57:/# apt-get -y install cuda
 # 9. Install cuDNN on Container Machine
 Download libcudnn8 and libcudnn8-dev from https://developer.nvidia.com/rdp/cudnn-download before this step and put them in /mnt/docker/volume/work/\_data directory which is already created in #2. So that container of ubuntu can use it thru mountpoint.
 ```
+$ sudo docker exec -it ubuntu /bin/bash
+-----
 root@3baa8af15d57:/# echo "deb http://dk.archive.ubuntu.com/ubuntu/ bionic main universe" >> /etc/apt/sources.list
 root@3baa8af15d57:/# apt-get update
 root@3baa8af15d57:/# apt-get -y install gcc-6 g++-6
@@ -140,6 +142,8 @@ root@3baa8af15d57:/# dpkg -i /mnt/libcudnn8-dev_8.2.2.26-1+cuda11.4_amd64.deb
 
 # 10. Install dlib with CUDA on Container Machine
 ```
+$ sudo docker exec -it ubuntu /bin/bash
+-----
 root@3baa8af15d57:/# apt-get install -y python3-distutils python3-setuptools python3-pip
 root@3baa8af15d57:/# apt-get install -y cmake libopenblas-dev liblapack-dev libjpeg-dev
 root@3baa8af15d57:/# apt-get install -y git
@@ -155,6 +159,8 @@ root@3baa8af15d57:/# sudo python3 setup.py install --set DLIB_USE_CUDA=1 --set U
 
 # 11. Check if dlib was compiled with CUDA on Container Machine
 ```
+$ sudo docker exec -it ubuntu /bin/bash
+-----
 root@3baa8af15d57:/# pip3 list |grep dlib
 root@3baa8af15d57:/# python3
 Python 3.8.10 (default, Jun  2 2021, 10:49:15) 
@@ -167,6 +173,8 @@ True
 
 # 12. Install OpenCV and face_recognition on Container Machine
 ```
+$ sudo docker exec -it ubuntu /bin/bash
+-----
 root@3baa8af15d57:/# apt-get install -y python3-opencv
 root@3baa8af15d57:/# pip3 install face_recognition
 ```
