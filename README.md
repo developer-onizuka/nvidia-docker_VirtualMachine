@@ -1,23 +1,66 @@
 # nvidia-docker_VirtualMachine
 
+# 1. Create directory for docker images
+```
+$ sudo mount -t ext4 -o data=ordered /dev/nvme0n1 /mnt
+$ cd /mnt
+$ mkdir docker
+```
+
+# 2. Install Docker
 ```
 $ sudo apt-get update
 $ sudo apt-get install docker.io
+$ sudo su
+root@ubuntu-k8s:~ # cp /lib/systemd/system/docker.service /etc/systemd/system/
+root@ubuntu-k8s:~ # vi /etc/systemd/system/docker.service 
 
+# Edit as like below:
+ExecStart=/usr/bin/dockerd -H fd:// --containerd=/run/containerd/containerd.sock --data-root /mnt/docker
+#ExecStart=/usr/bin/dockerd -H fd:// --containerd=/run/containerd/containerd.sock
+
+root@ubuntu-k8s:~ # systemctl daemon-reload
+root@ubuntu-k8s:~ # systemctl restart docker
+root@ubuntu-k8s:~ # exit
+```
+
+# 3. Pull images for test
+```
 $ sudo docker pull hello-world
 $ sudo docker images
 $ sudo docker run hello-world:latest
+```
 
+# 4. Install nvidia-docker
+```
 $ sudo apt-get update
 $ sudo apt-get install -y nvidia-docker2
 $ sudo systemctl restart docker
+```
 
+# 5. Pull ubuntu:20.04 images from docker hub and run it
+```
 $ sudo docker pull ubuntu:20.04
 $ sudo docker run -itd --gpu all --name="ubuntu" --rm ubuntu:20.04
+```
+
+
+# 6. Log into it and install driver and CUDA
+```
 $ sudo docker exec -it ubuntu /bin/bash
 -----
 root@3baa8af15d57:/# apt-get update
 root@3baa8af15d57:/# apt install nvidia-driver-470
+root@3baa8af15d57:/#
+root@3baa8af15d57:/#
+root@3baa8af15d57:/# echo "deb http://dk.archive.ubuntu.com/ubuntu/ bionic main universe" >> /etc/apt/sources.list
+root@3baa8af15d57:/# apt-get update
+root@3baa8af15d57:/# apt-get install gcc-6 g++-6
+root@3baa8af15d57:/# dpkg -i /mnt/libcudnn8_8.2.2.26-1+cuda11.4_amd64.deb 
+root@3baa8af15d57:/# dpkg -i /mnt/libcudnn8-dev_8.2.2.26-1+cuda11.4_amd64.deb 
+
+
+root@3baa8af15d57:/# apt-get install python3-opencv
 -----
 $ sudo docker ps
 $ sudo docker commit <container-id> ubuntu-gpu
