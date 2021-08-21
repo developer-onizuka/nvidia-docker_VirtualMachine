@@ -176,5 +176,6 @@ ubuntu            20.04     1318b700e415   3 weeks ago          72.8MB
 
 # 14. Run test script on Virtual Machine
 ```
+$ xhost +
 $ sudo docker run -itd --gpus all --name="camera" --rm -v work:/mnt -v /tmp/.X11-unix:/tmp/.X11-unix --device /dev/video0:/dev/video0:mwr -e DISPLAY=$DISPLAY ubuntu-gpu-dlib:20.04 /mnt/test.py
 ```
