@@ -138,6 +138,7 @@ root@3baa8af15d57:/# dpkg -i /mnt/libcudnn8-dev_8.2.2.26-1+cuda11.4_amd64.deb
 
 
 ```
+root@3baa8af15d57:/# apt-get install -y python3-distutils python3-setuptools
 root@3baa8af15d57:/# apt-get install -y cmake libopenblas-dev liblapack-dev libjpeg-dev
 root@3baa8af15d57:/# apt-get install -y git
 root@3baa8af15d57:/# git clone https://github.com/davisking/dlib.git
