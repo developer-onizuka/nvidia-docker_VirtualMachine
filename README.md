@@ -1,4 +1,4 @@
-# 0. Install Ubuntu on KVM. See URL below.
+# 0. Install Ubuntu 20.04 as Virtual Machine with GPU on KVM. See the URL below.
 https://github.com/developer-onizuka/virtualMachine_withGPU
 
 # 1. Create directory for docker images on Virtual Machine
