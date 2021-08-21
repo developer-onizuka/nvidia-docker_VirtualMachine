@@ -1,14 +1,14 @@
 # 0. Install Ubuntu on KVM. See URL below.
 https://github.com/developer-onizuka/virtualMachine_withGPU
 
-# 1. Create directory for docker images
+# 1. Create directory for docker images on Virtual Machine(Ubuntu 20.04)
 ```
 $ sudo mount -t ext4 -o data=ordered /dev/nvme0n1 /mnt
 $ cd /mnt
 $ mkdir docker
 ```
 
-# 2. Install Docker
+# 2. Install Docker on Virtual Machine(Ubuntu 20.04)
 ```
 $ sudo apt-get update
 $ sudo apt-get install docker.io
@@ -25,21 +25,21 @@ root@ubuntu-k8s:~ # systemctl restart docker
 root@ubuntu-k8s:~ # exit
 ```
 
-# 3. Pull images for test
+# 3. Pull images for test on Virtual Machine(Ubuntu 20.04)
 ```
 $ sudo docker pull hello-world
 $ sudo docker images
 $ sudo docker run hello-world:latest
 ```
 
-# 4. Install nvidia-docker
+# 4. Install nvidia-docker on Virtual Machine(Ubuntu 20.04)
 ```
 $ sudo apt-get update
 $ sudo apt-get install -y nvidia-docker2
 $ sudo systemctl restart docker
 ```
 
-# 5. Pull ubuntu:20.04 images from docker hub and run it
+# 5. Pull ubuntu:20.04 images from docker hub and run it on Virtual Machine(Ubuntu 20.04)
 ```
 $ sudo docker pull ubuntu:20.04
 $ sudo docker volume create work
@@ -60,7 +60,7 @@ $ sudo docker run -itd --rm --name="ubuntu" ubuntu:20.04
 !!! Don't use --gpus option in this step. With gpus option, it will be failed!!!
 
 
-# 6. Log into ubuntu:20.04 images and install driver
+# 6. Log into ubuntu:20.04 images and install driver on Container Machine
 You might be asked Kyeboard Layout. My case was 6(Asia) --> 79(Tokyo) --> 55(Japanese) --> 1(Japanese). 
 
 Finally, You will see the Error message like below. This is because container didi not run with the option of "--gpus all".
@@ -73,7 +73,7 @@ root@3baa8af15d57:/# nvidia-smi
 Failed to initialize NVML: Unknown Error
 ```
 
-# 7. Commit image after driver install.
+# 7. Commit image after driver install on Virtual Machine
 ```
 $ sudo docker commit $(sudo docker ps -aq) ubuntu-gpu:20.04
 $ sudo docker images
@@ -82,7 +82,7 @@ ubuntu-gpu   20.04     79ea786a945d   20 seconds ago   1.94GB
 ubuntu       20.04     1318b700e415   3 weeks ago      72.8MB
 ```
 
-# 8. Install CUDA
+# 8. Install CUDA on Container Machine
 This time you add the option "--gpus all". This time you can see the result of nvidia-smi as below:
 ```
 $ xhost +
@@ -121,7 +121,7 @@ root@3baa8af15d57:/# apt-get update
 root@3baa8af15d57:/# apt-get -y install cuda
 ```
 
-# 9. Install cuDNN
+# 9. Install cuDNN on Container Machine
 Download libcudnn8 and libcudnn8-dev from https://developer.nvidia.com/rdp/cudnn-download before this step and put them in /mnt/docker/volume/work/\_data directory which is already created in #2. So that container of ubuntu can use it thru mountpoint.
 ```
 root@3baa8af15d57:/# echo "deb http://dk.archive.ubuntu.com/ubuntu/ bionic main universe" >> /etc/apt/sources.list
@@ -131,7 +131,7 @@ root@3baa8af15d57:/# dpkg -i /mnt/libcudnn8_8.2.2.26-1+cuda11.4_amd64.deb
 root@3baa8af15d57:/# dpkg -i /mnt/libcudnn8-dev_8.2.2.26-1+cuda11.4_amd64.deb 
 ```
 
-# 10. Install dlib with CUDA
+# 10. Install dlib with CUDA on Container Machine
 ```
 root@3baa8af15d57:/# apt-get install -y python3-distutils python3-setuptools python3-pip
 root@3baa8af15d57:/# apt-get install -y cmake libopenblas-dev liblapack-dev libjpeg-dev
@@ -146,7 +146,7 @@ root@3baa8af15d57:/# cd ..
 root@3baa8af15d57:/# sudo python3 setup.py install --set DLIB_USE_CUDA=1 --set USE_AVX_INSTRUCTIONS=1 --set CUDA_HOST_COMPILER=/usr/bin/gcc-6
 ```
 
-# 11. Check if dlib was compiled with CUDA
+# 11. Check if dlib was compiled with CUDA on Container Machine
 ```
 root@3baa8af15d57:/# pip3 list |grep dlib
 root@3baa8af15d57:/# python3
@@ -158,13 +158,13 @@ Type "help", "copyright", "credits" or "license" for more information.
 True
 ```
 
-# 12. Install OpenCV and face_recognition
+# 12. Install OpenCV and face_recognition on Container Machine
 ```
 root@3baa8af15d57:/# apt-get install -y python3-opencv
 root@3baa8af15d57:/# pip3 install face_recognition
 ```
 
-# 13. Commit image after installing everything.
+# 13. Commit image after installing everything on Virtual Machine
 ```
 $ sudo docker commit $(sudo docker ps -aq) ubuntu-gpu-dlib:20.04
 $ sudo docker images
