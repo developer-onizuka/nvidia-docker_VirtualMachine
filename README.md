@@ -167,8 +167,8 @@ root@3baa8af15d57:/# pip3 install face_recognition
 ```
 $ sudo docker commit $(sudo docker ps -aq) ubuntu-gpu-dlib:20.04
 $ sudo docker images
-REPOSITORY        TAG       IMAGE ID       CREATED          SIZE
-ubuntu-gpu-dlib   20.04     bcd3b8b4c236   12 seconds ago   14.5GB
-ubuntu-gpu        20.04     79ea786a945d   2 hours ago      1.94GB
-ubuntu            20.04     1318b700e415   3 weeks ago      72.8MB
+REPOSITORY        TAG       IMAGE ID       CREATED              SIZE
+ubuntu-gpu-dlib   20.04     9a815ec87dd8   About a minute ago   14.8GB
+ubuntu-gpu        20.04     79ea786a945d   2 hours ago          1.94GB
+ubuntu            20.04     1318b700e415   3 weeks ago          72.8MB
 ```
