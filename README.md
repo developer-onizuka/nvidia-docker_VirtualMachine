@@ -1,14 +1,14 @@
 # 0. Install Ubuntu on KVM. See URL below.
 https://github.com/developer-onizuka/virtualMachine_withGPU
 
-# 1. Create directory for docker images on Virtual Machine(Ubuntu 20.04)
+# 1. Create directory for docker images on Virtual Machine
 ```
 $ sudo mount -t ext4 -o data=ordered /dev/nvme0n1 /mnt
 $ cd /mnt
 $ mkdir docker
 ```
 
-# 2. Install Docker on Virtual Machine(Ubuntu 20.04)
+# 2. Install Docker on Virtual Machine
 ```
 $ sudo apt-get update
 $ sudo apt-get install docker.io
@@ -25,21 +25,21 @@ root@ubuntu-k8s:~ # systemctl restart docker
 root@ubuntu-k8s:~ # exit
 ```
 
-# 3. Pull images for test on Virtual Machine(Ubuntu 20.04)
+# 3. Pull images for test on Virtual Machine
 ```
 $ sudo docker pull hello-world
 $ sudo docker images
 $ sudo docker run hello-world:latest
 ```
 
-# 4. Install nvidia-docker on Virtual Machine(Ubuntu 20.04)
+# 4. Install nvidia-docker on Virtual Machine
 ```
 $ sudo apt-get update
 $ sudo apt-get install -y nvidia-docker2
 $ sudo systemctl restart docker
 ```
 
-# 5. Pull ubuntu:20.04 images from docker hub and run it on Virtual Machine(Ubuntu 20.04)
+# 5. Pull ubuntu:20.04 images from docker hub and run it on Virtual Machine
 ```
 $ sudo docker pull ubuntu:20.04
 $ sudo docker volume create work
