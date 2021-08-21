@@ -73,6 +73,8 @@ root@3baa8af15d57:/# nvidia-smi
 Failed to initialize NVML: Unknown Error
 ```
 
+
+
 # 7. Commit image after driver install.
 ```
 $ sudo docker commit $(sudo docker ps -aq) ubuntu-gpu:20.04
@@ -81,6 +83,23 @@ REPOSITORY   TAG       IMAGE ID       CREATED          SIZE
 ubuntu-gpu   20.04     79ea786a945d   20 seconds ago   1.94GB
 ubuntu       20.04     1318b700e415   3 weeks ago      72.8MB
 ```
+
+
+# 9. Install CUDA
+```
+root@3baa8af15d57:/# apt-get update
+root@3baa8af15d57:/# apt-get -y install wget
+root@3baa8af15d57:/# apt-get -y install gnupg gnupg2 gnupg1 
+root@3baa8af15d57:/# wget https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2004/x86_64/cuda-ubuntu2004.pin
+root@3baa8af15d57:/# mv cuda-ubuntu2004.pin /etc/apt/preferences.d/cuda-repository-pin-600
+root@3baa8af15d57:/# wget https://developer.download.nvidia.com/compute/cuda/11.4.0/local_installers/cuda-repo-ubuntu2004-11-4-local_11.4.0-470.42.01-1_amd64.deb
+root@3baa8af15d57:/# dpkg -i cuda-repo-ubuntu2004-11-4-local_11.4.0-470.42.01-1_amd64.deb
+root@3baa8af15d57:/# apt-key add /var/cuda-repo-ubuntu2004-11-4-local/7fa2af80.pub
+root@3baa8af15d57:/# apt-get update
+root@3baa8af15d57:/# apt-get -y install cuda
+```
+
+
 
 # 8. Install cuDNN
 This time you add the option "--gpus all". This time you can see the result of nvidia-smi as below:
@@ -117,19 +136,6 @@ root@3baa8af15d57:/# apt-get update
 root@3baa8af15d57:/# apt-get install gcc-6 g++-6
 root@3baa8af15d57:/# dpkg -i /mnt/libcudnn8_8.2.2.26-1+cuda11.4_amd64.deb 
 root@3baa8af15d57:/# dpkg -i /mnt/libcudnn8-dev_8.2.2.26-1+cuda11.4_amd64.deb 
-```
-
-# 9. Install CUDA
-```
-root@3baa8af15d57:/# apt-get update
-root@3baa8af15d57:/# apt-get -y install wget
-root@3baa8af15d57:/# wget https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2004/x86_64/cuda-ubuntu2004.pin
-root@3baa8af15d57:/# mv cuda-ubuntu2004.pin /etc/apt/preferences.d/cuda-repository-pin-600
-root@3baa8af15d57:/# wget https://developer.download.nvidia.com/compute/cuda/11.4.0/local_installers/cuda-repo-ubuntu2004-11-4-local_11.4.0-470.42.01-1_amd64.deb
-root@3baa8af15d57:/# dpkg -i cuda-repo-ubuntu2004-11-4-local_11.4.0-470.42.01-1_amd64.deb
-root@3baa8af15d57:/# apt-key add /var/cuda-repo-ubuntu2004-11-4-local/7fa2af80.pub
-root@3baa8af15d57:/# apt-get update
-root@3baa8af15d57:/# apt-get -y install cuda
 ```
 
 # 10. Install OpenCV
