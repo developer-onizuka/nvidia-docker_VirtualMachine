@@ -163,7 +163,7 @@ root@3baa8af15d57:/# apt-get install -y python3-opencv
 root@3baa8af15d57:/# pip3 install face_recognition
 ```
 
-# 13. Commit image after driver install everything.
+# 13. Commit image after installing everything.
 ```
 $ sudo docker commit $(sudo docker ps -aq) ubuntu-gpu-dlib:20.04
 $ sudo docker images
