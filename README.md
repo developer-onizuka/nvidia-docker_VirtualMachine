@@ -8,7 +8,7 @@ $ cd /mnt
 $ mkdir docker
 ```
 
-# 2. Install Docker on Virtual Machine
+# 2. Install Docker on Virtual Machine and changing directory to store images because it is too large.
 ```
 $ sudo apt-get update
 $ sudo apt-get install docker.io
