@@ -82,8 +82,10 @@ ubuntu-gpu   20.04     79ea786a945d   20 seconds ago   1.94GB
 ubuntu       20.04     1318b700e415   3 weeks ago      72.8MB
 ```
 
-# 8. Install CUDA
+# 8. Install cuDNN
 This time you add the option "--gpus all". This time you can see the result of nvidia-smi as below:
+
+Download libcudnn8 and libcudnn8-dev from https://developer.nvidia.com/rdp/cudnn-download and put them in /mnt/docker/volume/work/\_data directory which is already created in #2. So that container of ubuntu can use it thru mountpoint.
 ```
 $ xhost +
 $ sudo docker run -itd -v work:/mnt -v /tmp/.X11-unix:/tmp/.X11-unix --device /dev/video0:/dev/video0:mwr -e DISPLAY=$DISPLAY --gpus all --rm --name="ubuntu" ubuntu:20.04
@@ -110,9 +112,17 @@ Sat Aug 21 07:55:09 2021
 |=============================================================================|
 +-----------------------------------------------------------------------------+
 
+root@3baa8af15d57:/# echo "deb http://dk.archive.ubuntu.com/ubuntu/ bionic main universe" >> /etc/apt/sources.list
+root@3baa8af15d57:/# apt-get update
+root@3baa8af15d57:/# apt-get install gcc-6 g++-6
+root@3baa8af15d57:/# dpkg -i /mnt/libcudnn8_8.2.2.26-1+cuda11.4_amd64.deb 
+root@3baa8af15d57:/# dpkg -i /mnt/libcudnn8-dev_8.2.2.26-1+cuda11.4_amd64.deb 
+```
+
+# 9. Install CUDA
+```
 root@3baa8af15d57:/# apt-get update
 root@3baa8af15d57:/# apt-get -y install wget
-root@3baa8af15d57:/# apt-get -y install gnupg gnupg2 gnupg1
 root@3baa8af15d57:/# wget https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2004/x86_64/cuda-ubuntu2004.pin
 root@3baa8af15d57:/# mv cuda-ubuntu2004.pin /etc/apt/preferences.d/cuda-repository-pin-600
 root@3baa8af15d57:/# wget https://developer.download.nvidia.com/compute/cuda/11.4.0/local_installers/cuda-repo-ubuntu2004-11-4-local_11.4.0-470.42.01-1_amd64.deb
@@ -122,17 +132,7 @@ root@3baa8af15d57:/# apt-get update
 root@3baa8af15d57:/# apt-get -y install cuda
 ```
 
-# 8. Install cuDNN and OpenCV
-Download libcudnn8 and libcudnn8-dev from https://developer.nvidia.com/rdp/cudnn-download and put them in /mnt/docker/volume/work/\_data directory which is already created in #2. So that container of ubuntu can use it thru mountpoint.
-```
-root@3baa8af15d57:/# echo "deb http://dk.archive.ubuntu.com/ubuntu/ bionic main universe" >> /etc/apt/sources.list
-root@3baa8af15d57:/# apt-get update
-root@3baa8af15d57:/# apt-get install gcc-6 g++-6
-root@3baa8af15d57:/# dpkg -i /mnt/libcudnn8_8.2.2.26-1+cuda11.4_amd64.deb 
-root@3baa8af15d57:/# dpkg -i /mnt/libcudnn8-dev_8.2.2.26-1+cuda11.4_amd64.deb 
-```
-
-# 9. Install OpenCV
+# 10. Install OpenCV
 
 ``
 root@3baa8af15d57:/# apt-get install python3-opencv
