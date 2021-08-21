@@ -59,7 +59,6 @@ $ sudo docker run -itd --rm --name="ubuntu" ubuntu:20.04
 !!! Don't use --gpus option in this step. With gpus option, it will be failed!!!
 
 
-
 # 6. Log into ubuntu:20.04 images and install driver
 You might be asked Kyeboard Layout. My case was 6(Asia) --> 79(Tokyo) --> 55(Japanese) --> 1(Japanese). 
 
@@ -73,8 +72,6 @@ root@3baa8af15d57:/# nvidia-smi
 Failed to initialize NVML: Unknown Error
 ```
 
-
-
 # 7. Commit image after driver install.
 ```
 $ sudo docker commit $(sudo docker ps -aq) ubuntu-gpu:20.04
@@ -83,7 +80,6 @@ REPOSITORY   TAG       IMAGE ID       CREATED          SIZE
 ubuntu-gpu   20.04     79ea786a945d   20 seconds ago   1.94GB
 ubuntu       20.04     1318b700e415   3 weeks ago      72.8MB
 ```
-
 
 # 8. Install CUDA
 This time you add the option "--gpus all". This time you can see the result of nvidia-smi as below:
@@ -135,10 +131,8 @@ root@3baa8af15d57:/# dpkg -i /mnt/libcudnn8-dev_8.2.2.26-1+cuda11.4_amd64.deb
 ```
 
 # 10. Install dlib with CUDA
-
-
 ```
-root@3baa8af15d57:/# apt-get install -y python3-distutils python3-setuptools
+root@3baa8af15d57:/# apt-get install -y python3-distutils python3-setuptools python3-pip
 root@3baa8af15d57:/# apt-get install -y cmake libopenblas-dev liblapack-dev libjpeg-dev
 root@3baa8af15d57:/# apt-get install -y git
 root@3baa8af15d57:/# git clone https://github.com/davisking/dlib.git
@@ -149,13 +143,31 @@ root@3baa8af15d57:/# cmake .. -DDLIB_USE_CUDA=1 -DUSE_AVX_INSTRUCTIONS=1 -DCUDA_
 root@3baa8af15d57:/# cmake --build .
 root@3baa8af15d57:/# cd ..
 root@3baa8af15d57:/# sudo python3 setup.py install --set DLIB_USE_CUDA=1 --set USE_AVX_INSTRUCTIONS=1 --set CUDA_HOST_COMPILER=/usr/bin/gcc-6
+```
+
+# 11. Check if dlib was compiled with CUDA
+```
 root@3baa8af15d57:/# pip3 list |grep dlib
+root@3baa8af15d57:/# python3
+Python 3.8.10 (default, Jun  2 2021, 10:49:15) 
+[GCC 9.4.0] on linux
+Type "help", "copyright", "credits" or "license" for more information.
+>>> import dlib
+>>> dlib.DLIB_USE_CUDA
+True
 ```
 
-
-# 10. Install OpenCV
-
-``
-root@3baa8af15d57:/# apt-get install python3-opencv
+# 12. Install OpenCV
+```
+root@3baa8af15d57:/# apt-get install -y python3-opencv
 ```
 
+# 13. Commit image after driver install everything.
+```
+$ sudo docker commit $(sudo docker ps -aq) ubuntu-gpu-dlib:20.04
+$ sudo docker images
+REPOSITORY        TAG       IMAGE ID       CREATED          SIZE
+ubuntu-gpu-dlib   20.04     bcd3b8b4c236   12 seconds ago   14.5GB
+ubuntu-gpu        20.04     79ea786a945d   2 hours ago      1.94GB
+ubuntu            20.04     1318b700e415   3 weeks ago      72.8MB
+```
