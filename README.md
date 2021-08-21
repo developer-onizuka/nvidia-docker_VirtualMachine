@@ -54,19 +54,41 @@ $ sudo docker inspect work
         "Scope": "local"
     }
 ]
-$ xhost +
-$ sudo docker run -itd -v work:/mnt -v /tmp/.X11-unix:/tmp/.X11-unix --device /dev/video0:/dev/video0:mwr -e DISPLAY=$DISPLAY --gpus all --rm --name="ubuntu" ubuntu:20.04
+$ sudo docker run -itd --rm --name="ubuntu" ubuntu:20.04
+!!! Don't use --gpus option in this step. With gpus option, it will be failed. !!!
+You might ask Kyeboard Layout.
+My case was 6(Asia) --> 79(Tokyo) --> 55(Japanese) --> 1(Japanese). 
 ```
 
-
 # 6. Log into it and install driver
+You will see the Error message like below. This is because container didi not run with the option of "--gpus all".
 ```
 $ sudo docker exec -it ubuntu /bin/bash
 -----
 root@3baa8af15d57:/# apt-get update
 root@3baa8af15d57:/# apt install nvidia-driver-470
 root@3baa8af15d57:/# nvidia-smi
-Sat Aug 21 09:45:19 2021       
+Failed to initialize NVML: Unknown Error
+```
+
+# 7. Commit image after driver install.
+```
+$ sudo docker commit $(sudo docker ps -aq) ubuntu-gpu:20.04
+$ sudo docker images
+REPOSITORY   TAG       IMAGE ID       CREATED          SIZE
+ubuntu-gpu   20.04     79ea786a945d   20 seconds ago   1.94GB
+ubuntu       20.04     1318b700e415   3 weeks ago      72.8MB
+```
+
+# 8. Install CUDA
+This time you add the option "--gpus all". This time you can see the result of nvidia-smi as below:
+```
+$ xhost +
+$ sudo docker run -itd -v work:/mnt -v /tmp/.X11-unix:/tmp/.X11-unix --device /dev/video0:/dev/video0:mwr -e DISPLAY=$DISPLAY --gpus all --rm --name="ubuntu" ubuntu:20.04
+$ sudo docker exec -it ubuntu /bin/bash
+-----
+root@3baa8af15d57:/# nvidia-smi
+Sat Aug 21 07:55:09 2021       
 +-----------------------------------------------------------------------------+
 | NVIDIA-SMI 470.57.02    Driver Version: 470.57.02    CUDA Version: 11.4     |
 |-------------------------------+----------------------+----------------------+
@@ -75,7 +97,7 @@ Sat Aug 21 09:45:19 2021
 |                               |                      |               MIG M. |
 |===============================+======================+======================|
 |   0  Quadro P1000        Off  | 00000000:06:00.0 Off |                  N/A |
-| 34%   40C    P8    N/A /  N/A |     11MiB /  4040MiB |      0%      Default |
+| 34%   41C    P8    N/A /  N/A |     11MiB /  4040MiB |      0%      Default |
 |                               |                      |                  N/A |
 +-------------------------------+----------------------+----------------------+
                                                                                
@@ -85,17 +107,17 @@ Sat Aug 21 09:45:19 2021
 |        ID   ID                                                   Usage      |
 |=============================================================================|
 +-----------------------------------------------------------------------------+
-```
-# 7. Install CUDA
-```
-root@3baa8af15d57:/# apt-get install wget
+
+root@3baa8af15d57:/# apt-get update
+root@3baa8af15d57:/# apt-get -y install wget
+root@3baa8af15d57:/# apt-get -y install gnupg gnupg2 gnupg1
 root@3baa8af15d57:/# wget https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2004/x86_64/cuda-ubuntu2004.pin
-root@3baa8af15d57:/# sudo mv cuda-ubuntu2004.pin /etc/apt/preferences.d/cuda-repository-pin-600
+root@3baa8af15d57:/# mv cuda-ubuntu2004.pin /etc/apt/preferences.d/cuda-repository-pin-600
 root@3baa8af15d57:/# wget https://developer.download.nvidia.com/compute/cuda/11.4.0/local_installers/cuda-repo-ubuntu2004-11-4-local_11.4.0-470.42.01-1_amd64.deb
-root@3baa8af15d57:/# sudo dpkg -i cuda-repo-ubuntu2004-11-4-local_11.4.0-470.42.01-1_amd64.deb
-root@3baa8af15d57:/# sudo apt-key add /var/cuda-repo-ubuntu2004-11-4-local/7fa2af80.pub
-root@3baa8af15d57:/# sudo apt-get update
-root@3baa8af15d57:/# sudo apt-get -y install cuda
+root@3baa8af15d57:/# dpkg -i cuda-repo-ubuntu2004-11-4-local_11.4.0-470.42.01-1_amd64.deb
+root@3baa8af15d57:/# apt-key add /var/cuda-repo-ubuntu2004-11-4-local/7fa2af80.pub
+root@3baa8af15d57:/# apt-get update
+root@3baa8af15d57:/# apt-get -y install cuda
 ```
 
 # 8. Install cuDNN and OpenCV
