@@ -124,15 +124,33 @@ root@3baa8af15d57:/# apt-get update
 root@3baa8af15d57:/# apt-get -y install cuda
 ```
 
-# 8. Install cuDNN
+# 9. Install cuDNN
 Download libcudnn8 and libcudnn8-dev from https://developer.nvidia.com/rdp/cudnn-download before this step and put them in /mnt/docker/volume/work/\_data directory which is already created in #2. So that container of ubuntu can use it thru mountpoint.
 ```
 root@3baa8af15d57:/# echo "deb http://dk.archive.ubuntu.com/ubuntu/ bionic main universe" >> /etc/apt/sources.list
 root@3baa8af15d57:/# apt-get update
-root@3baa8af15d57:/# apt-get install gcc-6 g++-6
+root@3baa8af15d57:/# apt-get -y install gcc-6 g++-6
 root@3baa8af15d57:/# dpkg -i /mnt/libcudnn8_8.2.2.26-1+cuda11.4_amd64.deb 
 root@3baa8af15d57:/# dpkg -i /mnt/libcudnn8-dev_8.2.2.26-1+cuda11.4_amd64.deb 
 ```
+
+# 10. Install dlib with CUDA
+
+
+```
+root@3baa8af15d57:/# apt-get install -y cmake libopenblas-dev liblapack-dev libjpeg-dev
+root@3baa8af15d57:/# apt-get install -y git
+root@3baa8af15d57:/# git clone https://github.com/davisking/dlib.git
+root@3baa8af15d57:/# cd dlib/
+root@3baa8af15d57:/# mkdir build
+root@3baa8af15d57:/# cd build
+root@3baa8af15d57:/# cmake .. -DDLIB_USE_CUDA=1 -DUSE_AVX_INSTRUCTIONS=1 -DCUDA_HOST_COMPILER=/usr/bin/gcc-6
+root@3baa8af15d57:/# cmake --build .
+root@3baa8af15d57:/# cd ..
+root@3baa8af15d57:/# sudo python3 setup.py install --set DLIB_USE_CUDA=1 --set USE_AVX_INSTRUCTIONS=1 --set CUDA_HOST_COMPILER=/usr/bin/gcc-6
+root@3baa8af15d57:/# pip3 list |grep dlib
+```
+
 
 # 10. Install OpenCV
 
@@ -140,51 +158,3 @@ root@3baa8af15d57:/# dpkg -i /mnt/libcudnn8-dev_8.2.2.26-1+cuda11.4_amd64.deb
 root@3baa8af15d57:/# apt-get install python3-opencv
 ```
 
-
-```
-    1  pwd
-    2  hostname
-    3  exit
-    4  ls /dev/
-    5  apt-get install python3-opencv
-    6  cd /mnt
-    7  python3 openCV1.py 
-    8  cd
-    9  echo "deb http://dk.archive.ubuntu.com/ubuntu/ bionic main universe" >> /etc/apt/sources.list
-   10  apt-get update
-   11  apt-get install gcc-6 g++-6
-   12  dpkg -i /mnt/libcudnn8_8.2.2.26-1+cuda11.4_amd64.deb 
-   13  dpkg -i /mnt/libcudnn8-dev_8.2.2.26-1+cuda11.4_amd64.deb 
-   14  cd /mnt
-   15  ls
-   16  git clone https://github.com/davisking/dlib.git
-   17  apt-get install git
-   18  git clone https://github.com/davisking/dlib.git
-   19  cd dlib/
-   20  mkdir build
-   21  cmake .. -DDLIB_USE_CUDA=1 -DUSE_AVX_INSTRUCTIONS=1 -DCUDA_HOST_COMPILER=/usr/bin/gcc-6
-   22  apt-get install cmake libopenblas-dev liblapack-dev libjpeg-dev
-   23  apt-get install python3-pip
-   24  cmake .. -DDLIB_USE_CUDA=1 -DUSE_AVX_INSTRUCTIONS=1 -DCUDA_HOST_COMPILER=/usr/bin/gcc-6
-   25  cd build/
-   26  cmake .. -DDLIB_USE_CUDA=1 -DUSE_AVX_INSTRUCTIONS=1 -DCUDA_HOST_COMPILER=/usr/bin/gcc-6
-   27  apt-get install libx11-dev
-   28  cmake .. -DDLIB_USE_CUDA=1 -DUSE_AVX_INSTRUCTIONS=1 -DCUDA_HOST_COMPILER=/usr/bin/gcc-6
-   29  history
-
-
-
-    6  cp /lib/systemd/system/docker.service /etc/systemd/system/
-    7  vi /etc/systemd/system/docker.service 
-
-ExecStart=/usr/bin/dockerd -H fd:// --containerd=/run/containerd/containerd.sock --data-root /mnt/docker
-#ExecStart=/usr/bin/dockerd -H fd:// --containerd=/run/containerd/containerd.sock
-
-
-
-
-    8  systemctl daemon-reload
-    9  systemctl restart docker
-
-
-```
