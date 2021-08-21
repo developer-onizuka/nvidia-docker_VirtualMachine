@@ -55,7 +55,7 @@ $ sudo docker inspect work
         "Scope": "local"
     }
 ]
-$ sudo docker run -itd --rm --name="ubuntu" ubuntu:20.04
+$ sudo docker run -itd -v work:/mnt --rm --name="ubuntu" ubuntu:20.04
 ```
 !!! Don't use --gpus option in this step. With gpus option, it will be failed!!!
 
