@@ -3,7 +3,7 @@ https://github.com/developer-onizuka/virtualMachine_withGPU
 
 # 1. Create directory for docker images on Virtual Machine
 ```
-$ sudo mount -t ext4 -o data=ordered /dev/nvme0n1 /mnt
+$ sudo mount -t ext4 -o data=ordered /dev/nvme0n1 /mnt   (This is my case. I use NVMe disk for mounting at /mnt.)
 $ cd /mnt
 $ mkdir docker
 ```
