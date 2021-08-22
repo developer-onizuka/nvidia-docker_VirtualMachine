@@ -230,6 +230,8 @@ ubuntu            20.04     1318b700e415   3 weeks ago      72.8MB
 
 # 16. Run the container on Virtual Machine
 ```
+$ sudo systemctl daemon-reload
+$ sudo systemctl restart docker
 $ xhost +
 $ sudo docker run -itd --gpus all --name="face" --rm -v /tmp/.X11-unix:/tmp/.X11-unix --device /dev/video0:/dev/video0:mwr -e DISPLAY=$DISPLAY face_recognizer:latest
 ```
