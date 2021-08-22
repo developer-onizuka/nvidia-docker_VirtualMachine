@@ -1,8 +1,8 @@
 # 0. Install Ubuntu 20.04 as Virtual Machine with GPU on KVM. See the URL below.
 https://github.com/developer-onizuka/virtualMachine_withGPU
 
-Note that you don't need install any GPU librarys in Host Machine. Even nvidia-driver in Host Machine. 
-You only install nvidia-driver and CUDA only into the Guest Linux Machine on KVM.
+Note that you don't need install any GPU librarys in Host Machine. Even nvidia-driver in Host Machine and Guest Virtual Machine. 
+You only install nvidia-driver, CUDA and GPU libraries only into Container Ubuntu on the Guest Linux Machine.
 ```
 OptiPlex-5050:~$ dpkg -l |grep -i nvidia
 OptiPlex-5050:~$ (no result)
@@ -22,11 +22,11 @@ $ sudo apt-get install docker.io
 $ sudo su
 root@ubuntu-k8s:~ # cp /lib/systemd/system/docker.service /etc/systemd/system/
 root@ubuntu-k8s:~ # vi /etc/systemd/system/docker.service 
-
+~~~~~~~~~~
 # Edit as like below:
 ExecStart=/usr/bin/dockerd -H fd:// --containerd=/run/containerd/containerd.sock --data-root /mnt/docker
 #ExecStart=/usr/bin/dockerd -H fd:// --containerd=/run/containerd/containerd.sock
-
+~~~~~~~~~~
 root@ubuntu-k8s:~ # systemctl daemon-reload
 root@ubuntu-k8s:~ # systemctl restart docker
 root@ubuntu-k8s:~ # exit
@@ -47,6 +47,8 @@ $ sudo systemctl restart docker
 ```
 
 # 5. Pull ubuntu:20.04 images from docker hub and run it on Virtual Machine
+!!! Don't use --gpus option in this step. With gpus option, it will be failed the step #6 if you use this option!!!
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 ```
 $ sudo docker pull ubuntu:20.04
 $ sudo docker volume create work
@@ -64,13 +66,11 @@ $ sudo docker inspect work
 ]
 $ sudo docker run -itd -v work:/mnt --rm --name="ubuntu" ubuntu:20.04
 ```
-!!! Don't use --gpus option in this step. With gpus option, it will be failed!!!
-
 
 # 6. Log into ubuntu:20.04 images and install driver on Container Machine
 You might be asked Kyeboard Layout. My case was 6(Asia) --> 79(Tokyo) --> 55(Japanese) --> 1(Japanese). 
 
-Finally, You will see the Error message like below. This is because container didi not run with the option of "--gpus all".
+Finally, You will see the Error message like below. This is because container did not run with the option of "--gpus all".
 ```
 $ sudo docker exec -it ubuntu /bin/bash
 -----
@@ -93,7 +93,7 @@ ubuntu       20.04     1318b700e415   3 weeks ago      72.8MB
 This time you add the option "--gpus all". This time you can see the result of nvidia-smi as below:
 ```
 $ xhost +
-$ sudo docker run -itd -v work:/mnt -v /tmp/.X11-unix:/tmp/.X11-unix --device /dev/video0:/dev/video0:mwr -e DISPLAY=$DISPLAY --gpus all --rm --name="ubuntu" ubuntu:20.04
+$ sudo docker run -itd -v work:/mnt -v /tmp/.X11-unix:/tmp/.X11-unix --device /dev/video0:/dev/video0:mwr -e DISPLAY=$DISPLAY --gpus all --rm --name="ubuntu" ubuntu-gpu:20.04
 $ sudo docker exec -it ubuntu /bin/bash
 -----
 root@3baa8af15d57:/# nvidia-smi
@@ -126,10 +126,11 @@ root@3baa8af15d57:/# dpkg -i cuda-repo-ubuntu2004-11-4-local_11.4.0-470.42.01-1_
 root@3baa8af15d57:/# apt-key add /var/cuda-repo-ubuntu2004-11-4-local/7fa2af80.pub
 root@3baa8af15d57:/# apt-get update
 root@3baa8af15d57:/# apt-get -y install cuda
+root@3baa8af15d57:/# exit
 ```
 
 # 9. Install cuDNN on Container Machine
-Download libcudnn8 and libcudnn8-dev from https://developer.nvidia.com/rdp/cudnn-download before this step and put them in /mnt/docker/volume/work/\_data directory which is already created in #2. So that container of ubuntu can use it thru mountpoint.
+Download libcudnn8 and libcudnn8-dev from https://developer.nvidia.com/rdp/cudnn-download prior to this step and put them in /mnt/docker/volume/work/\_data directory which is already created in #2. So that container of ubuntu can use it thru mountpoint.
 ```
 $ sudo docker exec -it ubuntu /bin/bash
 -----
@@ -138,6 +139,7 @@ root@3baa8af15d57:/# apt-get update
 root@3baa8af15d57:/# apt-get -y install gcc-6 g++-6
 root@3baa8af15d57:/# dpkg -i /mnt/libcudnn8_8.2.2.26-1+cuda11.4_amd64.deb 
 root@3baa8af15d57:/# dpkg -i /mnt/libcudnn8-dev_8.2.2.26-1+cuda11.4_amd64.deb 
+root@3baa8af15d57:/# exit
 ```
 
 # 10. Install dlib with CUDA on Container Machine
@@ -155,6 +157,7 @@ root@3baa8af15d57:/# cmake .. -DDLIB_USE_CUDA=1 -DUSE_AVX_INSTRUCTIONS=1 -DCUDA_
 root@3baa8af15d57:/# cmake --build .
 root@3baa8af15d57:/# cd ..
 root@3baa8af15d57:/# sudo python3 setup.py install --set DLIB_USE_CUDA=1 --set USE_AVX_INSTRUCTIONS=1 --set CUDA_HOST_COMPILER=/usr/bin/gcc-6
+root@3baa8af15d57:/# exit
 ```
 
 # 11. Check if dlib was compiled with CUDA on Container Machine
@@ -169,6 +172,10 @@ Type "help", "copyright", "credits" or "license" for more information.
 >>> import dlib
 >>> dlib.DLIB_USE_CUDA
 True
+
+(Press Ctrl+D to Quit)
+
+root@3baa8af15d57:/# exit
 ```
 
 # 12. Install OpenCV and face_recognition on Container Machine
@@ -177,6 +184,7 @@ $ sudo docker exec -it ubuntu /bin/bash
 -----
 root@3baa8af15d57:/# apt-get install -y python3-opencv
 root@3baa8af15d57:/# pip3 install face_recognition
+root@3baa8af15d57:/# exit
 ```
 
 # 13. Commit image after installing everything on Virtual Machine
