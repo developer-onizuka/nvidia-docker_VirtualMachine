@@ -136,6 +136,7 @@ $ sudo docker exec -it ubuntu /bin/bash
 -----
 root@3baa8af15d57:/# echo "deb http://dk.archive.ubuntu.com/ubuntu/ bionic main universe" >> /etc/apt/sources.list
 root@3baa8af15d57:/# apt-get update
+root@3baa8af15d57:/# apt-get install libx11-dev
 root@3baa8af15d57:/# apt-get -y install gcc-6 g++-6
 root@3baa8af15d57:/# dpkg -i /mnt/libcudnn8_8.2.2.26-1+cuda11.4_amd64.deb 
 root@3baa8af15d57:/# dpkg -i /mnt/libcudnn8-dev_8.2.2.26-1+cuda11.4_amd64.deb 
