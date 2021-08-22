@@ -208,7 +208,7 @@ $ sudo docker run -itd --gpus all --name="camera" --rm -v work:/mnt -v /tmp/.X11
 ```
 
 # 15 Install by using Dcokerfile
-If you can comfirm above, you might use the Dockerfile attach.
+If you can comfirm above, you might use the Dockerfile attached.
 ```
 $ cd face_recognizer
 $ ls
@@ -218,8 +218,17 @@ libcudnn8_8.2.2.26-1+cuda11.4_amd64.deb
 libcudnn8-dev_8.2.2.26-1+cuda11.4_amd64.deb
 test.py
 train.pkl
+$ sudo docker build -t face_recognizer .
+(see log attached.)
+
+$ sudo docker images
+REPOSITORY        TAG       IMAGE ID       CREATED          SIZE
+face_recognizer   latest    fd3cc8b93590   12 minutes ago   18.3GB
+ubuntu            20.04     1318b700e415   3 weeks ago      72.8MB
 ```
 
 # 15. Run the container
 ```
+$ xhost +
+$ sudo docker run -itd --gpus all --name="face" --rm -v /tmp/.X11-unix:/tmp/.X11-unix --device /dev/video0:/dev/video0:mwr -e DISPLAY=$DISPLAY face_recognizer:latest
 ```
