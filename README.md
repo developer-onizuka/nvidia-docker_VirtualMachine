@@ -236,7 +236,7 @@ $ sudo systemctl restart docker
 $ xhost +
 $ sudo docker run -itd --gpus all --name="face" --rm -v /tmp/.X11-unix:/tmp/.X11-unix --device /dev/video0:/dev/video0:mwr -e DISPLAY=$DISPLAY face_recognizer:latest
 ```
-Or following. An example below is the over-write of ENTORYPOINT, so you can run any python script using dlib and GPU.
+Or following. An example below is the over-write of ENTORYPOINT, so you can run any python scripts which are put on /mnt and using dlib and GPU's libraries.
 ```
 $ sudo mount -t ext4 -o data=ordered /dev/nvme0n1 /mnt
 $ sudo systemctl daemon-reload
