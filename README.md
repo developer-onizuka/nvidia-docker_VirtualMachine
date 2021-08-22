@@ -48,7 +48,7 @@ $ sudo systemctl restart docker
 
 # 5. Pull ubuntu:20.04 images from docker hub and run it on Virtual Machine
 !!! Don't use --gpus option in this step. With gpus option, it will be failed the step #6 if you use this option!!!
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
 ```
 $ sudo docker pull ubuntu:20.04
 $ sudo docker volume create work
