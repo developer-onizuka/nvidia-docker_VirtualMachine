@@ -46,10 +46,6 @@ $ sudo apt-get install -y nvidia-docker2
 $ sudo systemctl restart docker
 ```
 
-# 4.1 Install by using Dcokerfile
-```
-```
-
 # 5. Pull ubuntu:20.04 images from docker hub and run it on Virtual Machine
 !!! Don't use --gpus option in this step. With gpus option, it will be failed the step #6 if you use this option!!!
 
@@ -209,6 +205,19 @@ $ cd nvidia-docker_VirtualMachine
 $ sudo cp test.py /mnt/docker/volumes/work/_data
 $ xhost +
 $ sudo docker run -itd --gpus all --name="camera" --rm -v work:/mnt -v /tmp/.X11-unix:/tmp/.X11-unix --device /dev/video0:/dev/video0:mwr -e DISPLAY=$DISPLAY ubuntu-gpu-dlib:20.04 /mnt/test.py
+```
+
+# 15 Install by using Dcokerfile
+If you can comfirm above, you might use the Dockerfile attach.
+```
+$ cd face_recognizer
+$ ls
+cuda-repo-ubuntu2004-11-4-local_11.4.0-470.42.01-1_amd64.deb
+Dockerfile
+libcudnn8_8.2.2.26-1+cuda11.4_amd64.deb
+libcudnn8-dev_8.2.2.26-1+cuda11.4_amd64.deb
+test.py
+train.pkl
 ```
 
 # 15. Run the container
