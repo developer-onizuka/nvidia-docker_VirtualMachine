@@ -228,10 +228,19 @@ face_recognizer   latest    fd3cc8b93590   12 minutes ago   18.3GB
 ubuntu            20.04     1318b700e415   3 weeks ago      72.8MB
 ```
 
-# 16. Run the container on Virtual Machine
+# 16. Run the container on Virtual Machine (After Booting Virtual Machine)
 ```
+$ sudo mount -t ext4 -o data=ordered /dev/nvme0n1 /mnt
 $ sudo systemctl daemon-reload
 $ sudo systemctl restart docker
 $ xhost +
 $ sudo docker run -itd --gpus all --name="face" --rm -v /tmp/.X11-unix:/tmp/.X11-unix --device /dev/video0:/dev/video0:mwr -e DISPLAY=$DISPLAY face_recognizer:latest
+```
+Or following. An example below is the over-write of ENTORYPOINT, so you can run any python script using dlib and GPU.
+```
+$ sudo mount -t ext4 -o data=ordered /dev/nvme0n1 /mnt
+$ sudo systemctl daemon-reload
+$ sudo systemctl restart docker
+$ xhost +
+$ sudo docker run -itd --gpus all --name="face" --rm -v work:/mnt -v /tmp/.X11-unix:/tmp/.X11-unix --device /dev/video0:/dev/video0:mwr -e DISPLAY=$DISPLAY face_recognizer:latest /mnt/test.py
 ```
