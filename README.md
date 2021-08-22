@@ -207,9 +207,10 @@ $ xhost +
 $ sudo docker run -itd --gpus all --name="camera" --rm -v work:/mnt -v /tmp/.X11-unix:/tmp/.X11-unix --device /dev/video0:/dev/video0:mwr -e DISPLAY=$DISPLAY ubuntu-gpu-dlib:20.04 /mnt/test.py
 ```
 
-# 15 Install by using Dcokerfile
-If you can comfirm above, you might use the Dockerfile attached.
+# 15. Create the face_recognizer by using Dcokerfile on Virtual Machine
+If you can run the test above, you might use the Dockerfile attached.
 ```
+$ mkdir face_recognizer
 $ cd face_recognizer
 $ ls
 cuda-repo-ubuntu2004-11-4-local_11.4.0-470.42.01-1_amd64.deb
@@ -227,7 +228,7 @@ face_recognizer   latest    fd3cc8b93590   12 minutes ago   18.3GB
 ubuntu            20.04     1318b700e415   3 weeks ago      72.8MB
 ```
 
-# 15. Run the container
+# 16. Run the container on Virtual Machine
 ```
 $ xhost +
 $ sudo docker run -itd --gpus all --name="face" --rm -v /tmp/.X11-unix:/tmp/.X11-unix --device /dev/video0:/dev/video0:mwr -e DISPLAY=$DISPLAY face_recognizer:latest
