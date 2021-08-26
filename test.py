@@ -13,20 +13,20 @@ dispH=480
 knownFaces=[]
 Names=[]
 
-with open('/mnt/train.pkl','rb') as f:
+with open('/tmp/train.pkl','rb') as f:
     Names=pickle.load(f)
     knownFaces=pickle.load(f)
 
 font=cv2.FONT_HERSHEY_SIMPLEX
 cam=cv2.VideoCapture(0)
-#cam.set(cv2.CAP_PROP_FPS, 30)
-#cam.set(cv2.CAP_PROP_FRAME_WIDTH, dispW)
-#cam.set(cv2.CAP_PROP_FRAME_HEIGHT, dispH)
+cam.set(cv2.CAP_PROP_FPS, 30)
+cam.set(cv2.CAP_PROP_FRAME_WIDTH, dispW)
+cam.set(cv2.CAP_PROP_FRAME_HEIGHT, dispH)
 
 while True:
     timeStamp=time.time()
     _,frame=cam.read()
-    frame=cv2.resize(frame,(640,360))
+    #frame=cv2.resize(frame,(640,360))
     frameSmall=cv2.resize(frame,(0,0),fx=scaleFactor,fy=scaleFactor)
     frameRGB=cv2.cvtColor(frameSmall,cv2.COLOR_BGR2RGB)
     facePositions=face_recognition.face_locations(frameRGB,model='cnn')
@@ -49,7 +49,7 @@ while True:
     cv2.putText(frame,str(round(fpsReport,1))+'fps',(0,25),font,.75,(0,255,255,2))
     print('fps is:',fps)
     cv2.imshow('Picture',frame)
-    cv2.moveWindow('Picture',0,0)
+    #cv2.moveWindow('Picture',0,0)
     if cv2.waitKey(1)==ord('q'):
         break
 cam.release()
