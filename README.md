@@ -242,5 +242,5 @@ $ sudo mount -t ext4 -o data=ordered /dev/nvme0n1 /mnt
 $ sudo systemctl daemon-reload
 $ sudo systemctl restart docker
 $ xhost +
-$ sudo docker run -itd --gpus all --name="face" --rm -v work:/mnt -v /tmp/.X11-unix:/tmp/.X11-unix --device /dev/video0:/dev/video0:mwr -e DISPLAY=$DISPLAY face_recognizer:latest /mnt/test.py
+$ sudo docker run -itd --gpus all --name="face" --rm -v work:/mnt -v /tmp/.X11-unix:/tmp/.X11-unix --device /dev/video0:/dev/video0:mwr --entrypoint "/mnt/test.py" -e DISPLAY=$DISPLAY face_recognizer:latest
 ```
