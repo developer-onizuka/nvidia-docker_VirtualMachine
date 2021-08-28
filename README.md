@@ -46,6 +46,17 @@ $ sudo apt-get install -y nvidia-docker2
 $ sudo systemctl restart docker
 ```
 
+if you find error messages like "E: Unable to locate package nvidia-docker2", you might do followings:
+```
+$ curl -s -L https://nvidia.github.io/nvidia-docker/gpgkey | sudo apt-key add -
+$ distribution=$(. /etc/os-release;echo $ID$VERSION_ID)
+$ curl -s -L https://nvidia.github.io/nvidia-docker/$distribution/nvidia-docker.list | \
+  sudo tee /etc/apt/sources.list.d/nvidia-docker.list
+$ sudo apt-get update
+$ sudo apt-get install -y nvidia-docker2
+$ sudo systemctl restart docker
+```
+
 # 5. Pull ubuntu:20.04 images from docker hub and run it on Virtual Machine
 !!! Don't use --gpus option in this step. With gpus option, it will be failed the step #6 if you use this option!!!
 
