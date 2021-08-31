@@ -9,6 +9,7 @@ OptiPlex-5050:~$ (no result)
 
 # 1. Install nvidia-driver and Create directory for docker images on Virtual Machine
 ```
+$ sudo apt-get update
 $ sudo apt install nvidia-driver-470
 $ sudo mount -t ext4 -o data=ordered /dev/nvme0n1 /mnt   (This is my case. I use NVMe disk for mounting at /mnt.)
 $ cd /mnt
