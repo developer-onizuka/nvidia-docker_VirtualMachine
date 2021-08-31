@@ -1,7 +1,7 @@
 # 0. Install Ubuntu 20.04 as Virtual Machine with GPU on KVM. See the URL below.
 https://github.com/developer-onizuka/virtualMachine_withGPU
 
-Note that you don't need install any GPU libraries in Host Machine. Even nvidia-driver in Host Machine. But you need to install nvidia-driver in Guest Linux Machine. After installing nvidia-driver on Guest Linxu Machine, you install nvidia-driver, CUDA and GPU libraries only into Container Ubuntu on the Guest Linux Machine.
+Note that you don't need install any GPU libraries in Host Machine. Even nvidia-driver in Host Machine. But you need to install nvidia-driver in Guest Linux Machine. After installing nvidia-driver on Guest Linux Machine, you install nvidia-driver, CUDA and GPU libraries only into Container Ubuntu on the Guest Linux Machine.
 ```
 OptiPlex-5050:~$ dpkg -l |grep -i nvidia
 OptiPlex-5050:~$ (no result)
