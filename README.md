@@ -1,3 +1,5 @@
+https://youtu.be/Ry-RL-qMuEk
+
 # 0. Install Ubuntu 20.04 as Virtual Machine with GPU on KVM. See the URL below.
 https://github.com/developer-onizuka/virtualMachine_withGPU
 
